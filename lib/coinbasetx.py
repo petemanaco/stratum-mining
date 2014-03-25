@@ -63,7 +63,7 @@ class CoinbaseTransactionPOS(halfnode.CTransaction):
     extranonce_placeholder = struct.pack(extranonce_type, int('f000000ff111111f', 16))
     extranonce_size = struct.calcsize(extranonce_type)
 
-    def __init__(self, timestamper, coinbaser, value, flags, height, data, ntime):
+    def __init__(self, timestamper, coinbaser, value, proofoftx, proofoftxwinner, flags, height, data, ntime):
         super(CoinbaseTransactionPOS, self).__init__()
         log.debug("Got to CoinBaseTX")
         #self.extranonce = 0
@@ -83,7 +83,7 @@ class CoinbaseTransactionPOS(halfnode.CTransaction):
         tx_in.scriptSig = tx_in._scriptSig_template[0] + self.extranonce_placeholder + tx_in._scriptSig_template[1]
     
         tx_out = halfnode.CTxOut()
-        tx_out.nValue = value
+        tx_out.nValue = value - proofoftx
         tx_out.scriptPubKey = coinbaser.get_script_pubkey()
        
         self.nTime = ntime 
@@ -91,6 +91,12 @@ class CoinbaseTransactionPOS(halfnode.CTransaction):
             self.strTxComment = "http://github.com/ahmedbodi/stratum-mining"
         self.vin.append(tx_in)
         self.vout.append(tx_out)
+
+        if proofoftx != 0:
+            tx_out_proofoftx = halfnode.CTxOut()
+            tx_out_proofoftx.nValue = proofoftx
+            tx_out_proofoftx.scriptPubKey = binascii.unhexlify(proofoftxwinner['hex'])
+            self.vout.append(tx_out_proofoftx)
         
         # Two parts of serialized coinbase, just put part1 + extranonce + part2 to have final serialized tx
         self._serialized = super(CoinbaseTransactionPOS, self).serialize().split(self.extranonce_placeholder)

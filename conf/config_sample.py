@@ -12,7 +12,7 @@ You NEED to set the parameters in BASIC SETTINGS
 CENTRAL_WALLET = 'set_valid_addresss_in_config!'                # Local coin address where money goes
 
 COINDAEMON_TRUSTED_HOST = 'localhost'
-COINDAEMON_TRUSTED_PORT = 28332
+COINDAEMON_TRUSTED_PORT = 7474
 COINDAEMON_TRUSTED_USER = 'user'
 COINDAEMON_TRUSTED_PASSWORD = 'somepassword'
 
@@ -22,7 +22,7 @@ COINDAEMON_TRUSTED_PASSWORD = 'somepassword'
 # scrypt, sha256d, scrypt-jane, skeinhash, quark and riecoin
 # If the option does not meet either of these criteria stratum defaults to scrypt
 # For Coins which support TX Messages please enter yes in the TX selection
-COINDAEMON_ALGO = 'riecoin'
+COINDAEMON_ALGO = 'scrypt'
 COINDAEMON_TX = 'no'
 
 # ******************** BASIC SETTINGS ***************
